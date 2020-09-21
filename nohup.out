@@ -18,3 +18,10 @@
 [0mGET /css/bootstrap.min.css [36m304 [0m1.045 ms - -[0m
 [0mGET /js/jquery.min.js [36m304 [0m0.598 ms - -[0m
 [0mGET /js/bootstrap.min.js [36m304 [0m0.504 ms - -[0m
+[0mGET / [36m304 [0m1.199 ms - -[0m
+[0mGET /stylesheets/style.css [36m304 [0m0.471 ms - -[0m
+[0mGET /js/jquery.min.js [36m304 [0m0.647 ms - -[0m
+[0mGET /js/bootstrap.min.js [36m304 [0m0.952 ms - -[0m
+[0mGET /css/bootstrap.min.css [36m304 [0m0.947 ms - -[0m
+[0mPOST /GponForm/diag_Form?images/ [33m404 [0m1.921 ms - 913[0m
+[0mGET / [32m200 [0m1.101 ms - 783[0m
