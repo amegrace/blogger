@@ -2,7 +2,7 @@
 <html>
 
 	<head>
-	<title>Blog Add</title>
+	<title><%= title %></title>
 	<link rel='stylesheet' href='/stylesheets/style.css' />
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
 	</head>
@@ -12,10 +12,18 @@
 	<div class="container">
 		<% include ./partials/nav %>
 
-		<h1>Blog Add</h1>
-		<img src="https://i.pinimg.com/736x/15/a0/cf/15a0cf2ec72ca63fa4d8a8b0aca68b43--political-cartoons-kakao.jpg" alt="Under Construction Bear" />
-		<p>Under Construction!</p>
-
+		<p></p>
+		<div class="card border-primary" style="width: 50%">
+			<form method="post" action="/blogadd/" style="padding: 20px">
+				<div class="form-group">
+					<label class="text-primary" for="summary">Blog Title</label>
+					<input id="title" class="form-control" name="blog_title">
+					<label class="text-primary" for="detail">Blog Text</label>
+					<textarea id="text" class="form-control" rows="3" name="blog_text"></textarea>
+				</div>
+				<input class="btn btn-primary" type="submit" value="Create Blog">
+			</form>
+		</div>
 	</div>
 
 	</body>

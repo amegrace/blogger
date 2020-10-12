@@ -81,7 +81,7 @@ module.exports.add = function(req, res){
 /* Blog Edit */
 module.exports.edit = function(req, res){
 	var requestOptions, path;
-	path = '/api/blogs/' + req.params.blogId;
+	path = '/api/blogs/' + req.params._id;
 	requestOptions = {
 		url: apiOptions.server + path,
 		method: "GET",
@@ -106,12 +106,14 @@ var renderBlogEdit = function(req, res, responseBody){
 /* PUT Blog Edit */
 module.exports.editPut = function(req, res){
 	var requestOptions, path, postdata;
-	var id = req.params.blogId;
+	var id = req.params._id;
 	path = '/api/blogs/' + id;
 
 	postdata = {
+		_id: req.body._id,
 		blog_title: req.body.blog_title,
-		blog_text: req.body.blog_text
+		blog_text: req.body.blog_text,
+		created_on: req.body.created_on
 	};
 
 	requestOptions = {
@@ -123,7 +125,7 @@ module.exports.editPut = function(req, res){
 	request(
 		requestOptions,
 		function(err, response, body){
-			if(response.statusCode === 201){
+			if(response.statusCode === 200){
 				res.redirect('/bloglist');
 			} else{
 				_showError(req, res, response.statusCode);
@@ -135,7 +137,7 @@ module.exports.editPut = function(req, res){
 /* Delete blog */
 module.exports.del = function(req, res){
 	var requestOptions, path;
-	path = "/api/blogs/" + req.params.blogId;
+	path = "/api/blogs/" + req.params._id;
 	requestOptions = {
 		url: apiOptions.server + path,
 		method: "GET",
@@ -160,7 +162,7 @@ var renderBlogDelete = function(req, res, responseBody){
 /* DELETE blog */
 module.exports.blogDelete = function(req, res){
 	var requestOptions, path, postdata;
-	var id = req.params.blogId;
+	var id = req.params._id;
 	path = '/api/blogs/' + id;
 
 	requestOptions = {
