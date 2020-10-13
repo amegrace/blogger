@@ -8,13 +8,13 @@ var sendJSONresponse = function(res, status, content){
 /* GET blog by id */
 module.exports.blogInfoOfOne = function(req, res) {
 	console.log('Finding blog details', req.params);
-	if (req.params && req.params._id) {
+	if (req.params && req.params.blogId) {
 		Blog
-			.findById(req.params._id)
+			.findById(req.params.blogId)
 			.exec(function(err, location) {
 				if (!location) {
 					sendJSONresponse(res, 404, {
-						"message": "_id not found"
+						"message": "blogId not found"
 					});
 					return;
 				} else if (err) {
@@ -26,9 +26,9 @@ module.exports.blogInfoOfOne = function(req, res) {
 				sendJSONresponse(res, 200, location);
 			});
 	} else {
-		console.log('No _id specified');
+		console.log('No blogId specified');
 		sendJSONresponse(res, 404, {
-			"message": "No _id in request"
+			"message": "No blogId in request"
 		});
 	}
 };
@@ -90,11 +90,11 @@ module.exports.blogCreate = function(req, res){
 
 /* Update one blog */
 module.exports.blogUpdateOne = function(req, res){
-	console.log("Updating a blog with id of " + req.params._id);
+	console.log("Updating a blog with id of " + req.params.blogId);
 	console.log(req.body);
 	Blog
 		.findOneAndUpdate(
-			{ _id: req.params._id},
+			{ _id: req.params.blogId},
 			{ $set: {"blog_title": req.body.blog_title, "blog_text": req.body.blog_text, "created_on": req.body.created_on}},
 			function(err, response){
 				if(err){
@@ -108,10 +108,10 @@ module.exports.blogUpdateOne = function(req, res){
 
 /* Delete one blog */
 module.exports.blogDeleteOne = function(req, res){
-	console.log("Deleting blog with id of " + req.param._id);
+	console.log("Deleting blog with id of " + req.param.blogId);
 	console.log(req.body);
 	Blog
-		.findByIdAndRemove(req.params._id)
+		.findByIdAndRemove(req.params.blogId)
 		.exec (
 			function(err, response){
 				if(err){
