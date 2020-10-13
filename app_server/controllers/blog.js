@@ -110,7 +110,7 @@ module.exports.editPut = function(req, res){
 	path = '/api/blogs/' + id;
 
 	postdata = {
-		_id: req.body._id,
+		_id: id,
 		blog_title: req.body.blog_title,
 		blog_text: req.body.blog_text,
 		created_on: req.body.created_on
@@ -125,7 +125,7 @@ module.exports.editPut = function(req, res){
 	request(
 		requestOptions,
 		function(err, response, body){
-			if(response.statusCode === 200){
+			if(response.statusCode === 201){
 				res.redirect('/bloglist');
 			} else{
 				_showError(req, res, response.statusCode);

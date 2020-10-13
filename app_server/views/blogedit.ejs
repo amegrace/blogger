@@ -16,9 +16,9 @@
 		<form method="post" action="/blogedit/<%= blog._id %>" style="padding: 20px">
 			<div class="form-group">
 				<label class="text-primary" for="summary">Blog Title</label>
-				<input id="title" class="form-control" name="blog_title" value=<%= blog.blog_title %>>
+				<input id="title" class="form-control" name="title" value=<%= blog.blog_title %>>
 				<label class="text-primary" for="detail">Blog Text</label>
-				<textarea id="text" class="form-control" name="blog_text"><%= blog.blog_text %></textarea>
+				<textarea id="text" class="form-control" name="text" rows="3"><%= blog.blog_text %></textarea>
 			</div>
 			<input class="btn btn-primary" type="submit" value="Save Blog">
 		</form>
