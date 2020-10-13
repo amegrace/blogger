@@ -9,10 +9,10 @@ router.get('/', ctrlHome.home);
 /* Blog Page */
 router.get('/bloglist', ctrlBlog.bloglist);
 router.get('/blogadd', ctrlBlog.blogadd);
-router.get('/blogedit/:blogId', ctrlBlog.edit);
-router.get('/blogdelete/:blogId', ctrlBlog.del);
 router.post('/blogadd', ctrlBlog.add);
+router.get('/blogedit/:blogId', ctrlBlog.edit);
 router.post('/blogedit/:blogId', ctrlBlog.editPut);
+router.get('/blogdelete/:blogId', ctrlBlog.del);
 router.post('/blogdelete/:blogId', ctrlBlog.blogDelete);
 
 module.exports = router;
