@@ -58,6 +58,14 @@ function blogDeleteOne($http, blogId, data) {
 }
 
 /** Controllers **/
+app.controller('HomeController', function HomeController($http){
+	var vm = this;
+	vm.pageHeader = {
+		title: "Amelia Spanier Blog Site"
+	};
+	vm.message = "Welcome to my blog!";
+});
+
 app.controller('ListController', function ListController($http){
 	var vm = this;
 	vm.pageHeader = {
