@@ -4,35 +4,28 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require('./app_api/models/db');
-/**
-var indexRouter = require('./app_server/routes/index');
-var usersRouter = require('./app_server/routes/users');
-**/
+
 var apiRouter = require( './app_api/routes/index');
 
 var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, './app_server/views'));
-app.set('view engine', 'ejs');
+app.locals.moment = require('moment');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'app_client')));
 
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/js', express.static(__dirname + '/app_client'));
-app.use('/js', express.static(__dirname + '/app_client/lib'));
+app.use('/js', express.static(__dirname + '/node_modules/angular'));
+app.use('/js', express.static(__dirname + '/node_modules/angular-route'));
+app.use('/js', express.static(__dirname + '/node_modules/angular-ui-router/release'));
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/css', express.static(__dirname + '/public/stylesheets'));
 app.use('/webfonts', express.static(__dirname + '/public/fonts/webfonts/'));
 
-//app.use('/', indexRouter);
-//app.use('/users', usersRouter);
 app.use('/api', apiRouter);
 
 app.use(function(req, res){

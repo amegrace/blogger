@@ -4,35 +4,33 @@ var app = angular.module('blogApp', ['ngRoute', 'ui.router']);
 app.config(function($routeProvider){
 	$routeProvider
 		.when('/', {
-			templateURL: 'pages/home.html',
+			templateUrl: 'pages/home.html',
 				controller: 'HomeController',
 				controllerAs: 'vm'
 		})
-
 		.when('/bloglist', {
-			templateURL: 'pages/bloglist.html',
+			templateUrl: 'pages/bloglist.html',
 				controller: 'ListController',
 				controllerAs: 'vm'
 		})
 
 		.when('/blogadd', {
-			templateURL: 'pages/blogadd.html',
+			templateUrl: 'pages/blogadd.html',
 				controller: 'AddController',
 				controllerAs: 'vm'
 		})
 		
 		.when('/blogedit/:blogId', {
-			templateURL: 'pages/blogedit.html',
+			templateUrl: 'pages/blogedit.html',
 				controller: 'EditController',
 				controllerAs: 'vm'
 		})
 
 		.when('/blogdelete/:blogId', {
-			templateURL: 'pages/blogdelete.html',
+			templateUrl: 'pages/blogdelete.html',
 				controller: 'DeleteController',
 				controllerAs: 'vm'
 		})
-
 	.otherwise({redirectTo: '/'});
 });
 
@@ -56,15 +54,15 @@ function blogInfoOfOne($http, blogId) {
 }
 
 function blogCreate($http, data){
-	return $http.get('/api/blogs/', data);
+	return $http.post('/api/blogs/', data);
 }
 
 function blogUpdateOne($http, blogId, data) {
-	return $http.get('/api/blogs/' + blogId, data);
+	return $http.put('/api/blogs/' + blogId, data);
 }
 
 function blogDeleteOne($http, blogId) {
-	return $http.get('/api/blogs/' + blogId);
+	return $http.delete('/api/blogs/' + blogId);
 }
 
 /** Controllers **/
@@ -92,7 +90,7 @@ app.controller('ListController', function ListController($http){
 		});
 });
 
-app.controller('AddController', [ '$http', '$roteParams', '$state', function AddController($http, $routeParams, $state){
+app.controller('AddController', [ '$http', '$routeParams', '$state', function AddController($http, $routeParams, $state){
 	var vm = this;
 	vm.blog = {};
 	vm.pageHeader = {
@@ -143,7 +141,7 @@ app.controller('EditController', [ '$http', '$routeParams', '$state', function E
 				vm.message = "Blog data updated";
 				$state.go('bloglist');
 			})
-			.error(function (err){
+			.error(function (e){
 				vm.message = "Could not update blog given id of " + vm.blogId + userForm.blog_title.text + " " + userForm.blog_text.text;
 			});
 	}
@@ -169,7 +167,7 @@ app.controller('DeleteController', ['$http', '$routeParams', '$state', function 
 	vm.submit = function(){
 		var data = {};
 		blogDeleteOne($http, vm.blogId)
-			.success(function(){
+			.success(function(data){
 				vm.message = "Blog deleted";
 				$state.go('bloglist');
 			})
