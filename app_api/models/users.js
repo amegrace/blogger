@@ -23,11 +23,11 @@ var userSchema = new mongoose.Schema ({
 // User Schema Methods
 userSchema.methods.setPassword = function(password){
 	this.salt = crypto.randomBytes(16).toString('hex');
-	this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 64, 'sha512').toString('base62');
+	this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 64, 'sha512').toString('base64');
 };
 
 userSchema.methods.validPassword = function(password){
-	this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 64, 'sha512').toString('base62');
+	hash = crypto.pbkdf2Sync(password, this.salt, 10000, 64, 'sha512').toString('base64');
 	return this.hash === hash;
 };
 

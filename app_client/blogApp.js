@@ -66,15 +66,15 @@ function blogInfoOfOne($http, blogId) {
 	return $http.get('/api/blogs/' + blogId);
 }
 
-function blogCreate($http, data){
+function blogCreate($http, authentication, data){
 	return $http.post('/api/blogs/', data, { headers: { Authorization: 'Bearer ' + authentication.getToken() }});
 }
 
-function blogUpdateOne($http, blogId, data) {
+function blogUpdateOne($http, authentication, blogId, data) {
 	return $http.put('/api/blogs/' + blogId, data, { headers: { Authorization: 'Bearer ' + authentication.getToken() }});
 }
 
-function blogDeleteOne($http, blogId) {
+function blogDeleteOne($http, authentication, blogId) {
 	return $http.delete('/api/blogs/' + blogId, { headers: { Authorization: 'Bearer ' + authentication.getToken() }});
 }
 
@@ -93,6 +93,10 @@ app.controller('ListController', function ListController($http){
 		title: 'Blog List'
 	};
 
+	vm.isLoggedIn = function(){
+		return authentication.isLoggedIn();
+	};
+
 	blogInfo($http)
 		.success(function(data) {
 			vm.blogs = data;
@@ -103,7 +107,7 @@ app.controller('ListController', function ListController($http){
 		});
 });
 
-app.controller('AddController', [ '$http', '$routeParams', '$state', function AddController($http, $routeParams, $state){
+app.controller('AddController', [ '$http', '$routeParams', '$state', 'authentication', function AddController($http, $routeParams, $state, authentication){
 	var vm = this;
 	vm.blog = {};
 	vm.pageHeader = {
@@ -115,7 +119,7 @@ app.controller('AddController', [ '$http', '$routeParams', '$state', function Ad
 		data.blog_title = userForm.blog_title.value;
 		data.blog_text = userForm.blog_text.value;
 
-		blogCreate($http, data)
+		blogCreate($http, authentication, data)
 			.success(function(data) {
 				vm.message = "Blog added";
 				$state.go('bloglist');
@@ -127,7 +131,7 @@ app.controller('AddController', [ '$http', '$routeParams', '$state', function Ad
 
 }]);
 
-app.controller('EditController', [ '$http', '$routeParams', '$state', function EditController($http, $routeParams, $state) {
+app.controller('EditController', [ '$http', '$routeParams', '$state', 'authentication', function EditController($http, $routeParams, $state, authentication) {
 	var vm = this;
 	vm.blog = {};
 	vm.blogId = $routeParams.blogId;
@@ -149,7 +153,7 @@ app.controller('EditController', [ '$http', '$routeParams', '$state', function E
 		data.blog_title = userForm.blog_title.value;
 		data.blog_text = userForm.blog_text.value;
 
-		blogUpdateOne($http, vm.blogId, data)
+		blogUpdateOne($http, authentication, vm.blogId, data)
 			.success(function(data) {
 				vm.message = "Blog data updated";
 				$state.go('bloglist');
@@ -160,7 +164,7 @@ app.controller('EditController', [ '$http', '$routeParams', '$state', function E
 	}
 }]);
 
-app.controller('DeleteController', ['$http', '$routeParams', '$state', function DeleteController($http, $routeParams, $state) {
+app.controller('DeleteController', ['$http', '$routeParams', '$state', 'authentication', function DeleteController($http, $routeParams, $state, authentication) {
 	var vm = this;
 	vm.blog = {};
 	vm.blogId = $routeParams.blogId;
@@ -168,7 +172,7 @@ app.controller('DeleteController', ['$http', '$routeParams', '$state', function 
 		title: 'Blog Delete'
 	};
 
-	blogInfoOfOne($http, vm.blogId)
+	blogInfoOfOne($http,vm.blogId)
 		.success(function(data) {
 			vm.blog = data;
 			vm.message = "Blog data found";
@@ -179,7 +183,7 @@ app.controller('DeleteController', ['$http', '$routeParams', '$state', function 
 		
 	vm.submit = function(){
 		var data = {};
-		blogDeleteOne($http, vm.blogId)
+		blogDeleteOne($http, authentication, vm.blogId)
 			.success(function(data){
 				vm.message = "Blog deleted";
 				$state.go('bloglist');
