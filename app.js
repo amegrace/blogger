@@ -1,10 +1,12 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var passport = require('passport');
 require('./app_api/models/db');
-
+require('./app_api/config/passport');
 var apiRouter = require( './app_api/routes/index');
 
 var app = express();
@@ -22,6 +24,9 @@ app.use('/js', express.static(__dirname + '/app_client'));
 app.use('/js', express.static(__dirname + '/node_modules/angular'));
 app.use('/js', express.static(__dirname + '/node_modules/angular-route'));
 app.use('/js', express.static(__dirname + '/node_modules/angular-ui-router/release'));
+app.use('/nav', express.static(__dirname + '/app_client/common/nav'));
+app.use('/auth', express.static(__dirname + '/app_client/common/auth'));
+app.use(passport.initialize());
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/css', express.static(__dirname + '/public/stylesheets'));
 app.use('/webfonts', express.static(__dirname + '/public/fonts/webfonts/'));

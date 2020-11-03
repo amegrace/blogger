@@ -31,6 +31,19 @@ app.config(function($routeProvider){
 				controller: 'DeleteController',
 				controllerAs: 'vm'
 		})
+		
+		.when('/login', {
+			templateUrl: 'common/auth/login.view.html',
+				controller: 'LoginController',
+				controllerAs: 'vm'
+		})
+
+		.when('/register', {
+			templateUrl: 'common/auth/register.view.html',
+				controller: 'RegisterController',
+				controllerAs: 'vm'
+		})
+
 	.otherwise({redirectTo: '/'});
 });
 
@@ -54,15 +67,15 @@ function blogInfoOfOne($http, blogId) {
 }
 
 function blogCreate($http, data){
-	return $http.post('/api/blogs/', data);
+	return $http.post('/api/blogs/', data, { headers: { Authorization: 'Bearer ' + authentication.getToken() }});
 }
 
 function blogUpdateOne($http, blogId, data) {
-	return $http.put('/api/blogs/' + blogId, data);
+	return $http.put('/api/blogs/' + blogId, data, { headers: { Authorization: 'Bearer ' + authentication.getToken() }});
 }
 
 function blogDeleteOne($http, blogId) {
-	return $http.delete('/api/blogs/' + blogId);
+	return $http.delete('/api/blogs/' + blogId, { headers: { Authorization: 'Bearer ' + authentication.getToken() }});
 }
 
 /** Controllers **/
