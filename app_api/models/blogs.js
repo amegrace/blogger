@@ -5,7 +5,9 @@ var blogSchema = new mongoose.Schema({
 	created_on: {
 		type: Date,
 		"default": Date.now
-	}
+	},
+	blog_author: String,
+	author_email: String
 });
 
 mongoose.model('blogger', blogSchema);

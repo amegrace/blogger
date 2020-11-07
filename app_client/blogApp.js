@@ -87,7 +87,7 @@ app.controller('HomeController', function HomeController(){
 	vm.message = "Welcome to my blog!";
 });
 
-app.controller('ListController', function ListController($http){
+app.controller('ListController', ['$http', 'authentication', function ListController($http, authentication){
 	var vm = this;
 	vm.pageHeader = {
 		title: 'Blog List'
@@ -95,6 +95,10 @@ app.controller('ListController', function ListController($http){
 
 	vm.isLoggedIn = function(){
 		return authentication.isLoggedIn();
+	};
+
+	vm.getEmail = function(){
+		return authentication.currentUser().email;
 	};
 
 	blogInfo($http)
@@ -105,7 +109,7 @@ app.controller('ListController', function ListController($http){
 		.error(function (e) {
 			vm.message = "Could not get blog list";
 		});
-});
+}]);
 
 app.controller('AddController', [ '$http', '$routeParams', '$state', 'authentication', function AddController($http, $routeParams, $state, authentication){
 	var vm = this;
@@ -118,6 +122,8 @@ app.controller('AddController', [ '$http', '$routeParams', '$state', 'authentica
 		var data = vm.blog;
 		data.blog_title = userForm.blog_title.value;
 		data.blog_text = userForm.blog_text.value;
+		data.blog_author = authentication.currentUser().name;
+		data.author_email = authentication.currentUser().email;
 
 		blogCreate($http, authentication, data)
 			.success(function(data) {

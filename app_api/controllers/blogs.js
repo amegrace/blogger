@@ -61,7 +61,9 @@ var buildBlogList = function(req, res, results){
 			_id: obj._id,
 			blog_title: obj.blog_title,
 			blog_text: obj.blog_text,
-			created_on: obj.created_on
+			created_on: obj.created_on,
+			blog_author: obj.blog_author,
+			author_email: obj.author_email
 		});
 	});
 	return blogs;
@@ -75,7 +77,9 @@ module.exports.blogCreate = function(req, res){
 			_id: req.body._id,
 			blog_title: req.body.blog_title,
 			blog_text: req.body.blog_text,
-			created_on: req.body.created_on
+			created_on: req.body.created_on,
+			blog_author: req.body.blog_author,
+			author_email: req.body.author_email
 		}, function(err, location){
 			if(err){
 				console.log(err);
