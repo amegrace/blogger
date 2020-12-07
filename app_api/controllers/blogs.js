@@ -112,7 +112,7 @@ module.exports.blogUpdateOne = function(req, res){
 
 /* Delete one blog */
 module.exports.blogDeleteOne = function(req, res){
-	console.log("Deleting blog with id of " + req.param.blogId);
+	console.log("Deleting blog with id of " + req.params.blogId);
 	console.log(req.body);
 	Blog
 		.findByIdAndRemove(req.params.blogId)

@@ -8,9 +8,16 @@ app.config(function($routeProvider){
 				controller: 'HomeController',
 				controllerAs: 'vm'
 		})
+		
 		.when('/bloglist', {
 			templateUrl: 'pages/bloglist.html',
 				controller: 'ListController',
+				controllerAs: 'vm'
+		})
+		
+		.when('/bloglistone/:blogId', {
+			templateUrl: 'pages/bloglistone.html',
+				controller: 'ListOneController',
 				controllerAs: 'vm'
 		})
 
@@ -29,6 +36,12 @@ app.config(function($routeProvider){
 		.when('/blogdelete/:blogId', {
 			templateUrl: 'pages/blogdelete.html',
 				controller: 'DeleteController',
+				controllerAs: 'vm'
+		})
+		
+		.when('/commentdelete/:commentId', {
+			templateUrl: 'pages/commentdelete.html',
+				controller: 'CommentDeleteController',
 				controllerAs: 'vm'
 		})
 		
@@ -59,7 +72,7 @@ app.config(function($stateProvider) {
 
 /** REST Web API functions **/
 function blogInfo($http) {
-	return $http.get('/api/blogs');
+	return $http.get('/api/blogs/');
 }
 
 function blogInfoOfOne($http, blogId) {
@@ -68,6 +81,10 @@ function blogInfoOfOne($http, blogId) {
 
 function blogCreate($http, authentication, data){
 	return $http.post('/api/blogs/', data, { headers: { Authorization: 'Bearer ' + authentication.getToken() }});
+}
+
+function commentsCreate($http, authentication, blogId, data){
+	return $http.post('/api/blogs/' + blogId, data, { headers: { Authorization: 'Bearer ' + authentication.getToken() }});
 }
 
 function blogUpdateOne($http, authentication, blogId, data) {
@@ -87,7 +104,7 @@ app.controller('HomeController', function HomeController(){
 	vm.message = "Welcome to my blog!";
 });
 
-app.controller('ListController', ['$http', 'authentication', function ListController($http, authentication){
+app.controller('ListController', ['$http', '$scope', '$interval', 'authentication', function ListController($http, $scope, $interval, authentication){
 	var vm = this;
 	vm.pageHeader = {
 		title: 'Blog List'
@@ -109,6 +126,75 @@ app.controller('ListController', ['$http', 'authentication', function ListContro
 		.error(function (e) {
 			vm.message = "Could not get blog list";
 		});
+	
+	$scope.callAtInterval = function(){
+		console.log("Interval occurred");
+		blogInfo($http)
+		.success(function(data){
+			vm.blogs = data;
+			vm.message = "Blog info found";
+		})
+		.error(function(e){
+			vm.message = "Could not get blog list";
+		});
+	}
+	$interval(function(){$scope.callAtInterval();}, 5000, 0, true);
+}]);
+
+app.controller('ListOneController', ['$http', '$scope', '$interval', '$routeParams', '$state', 'authentication', function ListOneController($http, $scope, $interval, $routeParams, $state, authentication){
+	var vm = this;
+	vm.comment = {};
+	vm.blogId = $routeParams.blogId;
+	vm.PageHeader = {
+		title: 'Blog Content' 
+	};
+	
+	vm.isLoggedIn = function(){
+		return authentication.isLoggedIn();
+	};
+	
+	vm.getEmail = function(){
+		return authentication.currentUser().email;
+	};
+
+	blogInfoOfOne($http, vm.blogId)
+		.success(function(data) {
+			vm.blog = data;
+			vm.message = "Blog info found";
+		})
+		.error(function (e){
+			vm.message = "Could not get blog given id of " + vm.blogId;
+		});
+
+	$scope.callAtInterval = function(){
+		console.log("Interval occurred");
+		blogInfoOfOne($http, vm.blogId)
+			.success(function(data){
+				vm.blog = data;
+				vm.message = "Blog info found";
+			})
+			.error(function(e){
+				vm.message = "Could not get blog given id of " + vm.blogId;
+			});
+	}
+	$interval(function(){$scope.callAtInterval();}, 5000, 0, true);
+
+	vm.submit = function(){
+		var data = vm.comment;
+		
+		data.comment_text = userForm.comment_text.value;
+		data.comment_author = authentication.currentUser().name;
+		data.author_email = authentication.currentUser().email;
+
+		commentsCreate($http, authentication, vm.blogId, data)
+			.success(function(data){
+				vm.message = "Comment added";
+				$state.go('bloglistone/' + vm.blogId);
+			})
+			.error(function(e){
+				vm.message = "Could not add comment";
+			});
+	}
 }]);
 
 app.controller('AddController', [ '$http', '$routeParams', '$state', 'authentication', function AddController($http, $routeParams, $state, authentication){
@@ -183,7 +269,7 @@ app.controller('DeleteController', ['$http', '$routeParams', '$state', 'authenti
 			vm.blog = data;
 			vm.message = "Blog data found";
 		})
-		.error(function(e) {
+	.error(function(e) {
 			vm.message = "Could not get book given id of " + vm.blogId;
 		});
 		

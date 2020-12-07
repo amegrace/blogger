@@ -67,6 +67,7 @@ function authentication ($window, $http){
 	};
 }
 
+
 /** Controllers **/
 app.controller('LoginController', ['$http', '$location', 'authentication', function LoginController($http, $location, authentication){
 	var vm = this;

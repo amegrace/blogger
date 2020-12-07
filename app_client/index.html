@@ -43,8 +43,47 @@
 									<i class="fas fa-trash-alt"></i>
 									</a>
 								</li>
+								<li class="nav-item">
+									<a ng-show="vm.isLoggedIn()" class="nav-link" href="#/bloglistone/{{blog._id}}">
+									<i class="fas fa-envelope-open"></i>
+									</a>
+								</li>
 							</ul>
 						</div>
+					</div>
+				</div>
+			</div>
+		</script>
+		<script type="text/ng-template" id="pages/bloglistone.html">
+			<p></p>
+			<div class="card border-primary" style="width: 50%">
+				<div class="card-header"></div>
+				<div class="card-body">
+					<h5 class="card-title">{{vm.blog.blog_title}}</h5>
+					<p>{{vm.blog.blog_text}}</p>
+					<h6>Published by {{vm.blog.blog_author}} on</h6>
+					<h6 ng-bind="vm.blog.created_on | date: 'MM/dd/yyyy h:mm '"></h6>
+				</div>
+				<div class="card-footer">
+					<div class="col-sm">
+					<form name="userForm" ng-submit="vm.submit()" ng-controller="ListOneController" style="padding: 10px">
+						<div class="form-group">
+						<input id="comment" class="form-control float-left" name="comment_text" placeholder="Leave a comment!">
+
+						<input class="btn btn-primary float-right" type="submit" value="Send">
+						</div>
+					</form>
+					</div>
+				</div>
+			</div>
+			<div ng-repeat="comment in vm.blog.comments">
+				<div class="card border-primary" style="width: 50%">
+					<div class="card-body">
+					<h6 style="font-size: 12pt">{{comment.comment_author}}</h6>
+					<p style="font-size: 11pt">{{comment.comment_text}}</p>
+					<h6 ng-bind="comment.created_on | date: 'MM/dd/yyyy h:mm '" style="font-size: 10px"></h6>
+					</div>
+					<div class="card-footer">
 					</div>
 				</div>
 			</div>
